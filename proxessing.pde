@@ -6,13 +6,12 @@ boolean[] playground = new boolean[10000];
 
 void setup() {
   size(1000, 1000);
+  for (int i=0; i<10000; i++) {
+    playground[i] = boolean(int(random(0,2)%2));
+  }
 }
 
 void draw() {
-  for (int i=0; i<10000; i++)
-{
-  playground[i] = false;
-}
 for (int i=0; i<plength; i++)
 {
   for (int j=0; j<pwidth; j++)
