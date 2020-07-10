@@ -12,7 +12,7 @@ void setup() {
   /*playground[plength*20+20]=true;
   playground[plength*20+21]=true;
   playground[plength*20+22]=true;*/
-  frameRate(0.1);
+  frameRate(1);
 } //<>//
 
 boolean[] proxess(boolean[] pre, int plength) {
@@ -58,14 +58,18 @@ boolean[] proxess(boolean[] pre, int plength) {
               int(pre[i+plength-1]) + int(pre[i+plength]) + int(pre[i+plength+1]) + 
               int(pre[i-plength-1]) + int(pre[i-plength]) + int(pre[i-plength+1]);
     }
-
-    if (count<2) {
-      proxessed[i] = false;
+    if (pre[i]==true) {
+      if (count<2) {
+        proxessed[i] = false;
+      }
+      else if (count<=3) {
+        proxessed[i] = pre[i];
+      }
+      else {
+        proxessed[i] = false;
+      }
     }
-    else if (count<=3) {
-      proxessed[i] = pre[i];
-    }
-    else {
+    else if (count==3) {
       proxessed[i] = true;
     }
 
