@@ -3,17 +3,19 @@ final int plength = 100;
 final int pwidth = 100;
 
 boolean[] playground = new boolean[10000]; 
+boolean switcher = false;
 
 void setup() {
   size(1000, 1000);
-  for (int i=0; i<10000; i++) {
+  /*for (int i=0; i<10000; i++) {
     playground[i] = boolean(int(random(0,2)%2));
-  }
+  }*/
+
   /*playground[plength*20+20]=true;
   playground[plength*20+21]=true;
   playground[plength*20+22]=true;*/
-  frameRate(1);
-} //<>//
+  frameRate(60);
+}
 
 boolean[] proxess(boolean[] pre, int plength) {
   boolean[] proxessed = new boolean[10000];
@@ -77,8 +79,34 @@ boolean[] proxess(boolean[] pre, int plength) {
   return proxessed;
 }
 
+int frameCounter = 0;
+int blockX, blockY;
+
 void draw() {
-  playground = proxess(playground,plength); //<>//
+  
+  if (key==ENTER&&keyPressed) {
+    switcher = true;
+  }
+  if (switcher) {
+    if (frameCounter==60) {
+      playground = proxess(playground,plength);
+      frameCounter = 0;
+    }
+    else {
+      frameCounter++;
+    }
+  }
+  else {
+    
+    if (mousePressed && (mouseButton == LEFT)) {
+      if (blockX!=mouseX/10||blockY!=mouseY/10) {
+        blockX=mouseX/10;
+        blockY=mouseY/10;
+        playground[blockX+blockY*100] = !playground[blockX+blockY*100];
+      }
+    }
+  }
+
   for (int i=0; i<plength; i++) {
     for (int j=0; j<pwidth; j++) {
       if (playground[i*pwidth+j]==true) {
