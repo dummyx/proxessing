@@ -1,13 +1,13 @@
-final int block_size = 10;
-final int pwidth = 100;
-final int pheight = 100;
+final int block_size = 20;
+final int pwidth = 25;
+final int pheight = 25;
 final int blockN = pwidth*pheight;
 
 boolean[] playground = new boolean[blockN]; 
 boolean switcher = false;
 
 void setup() {
-  size(1000, 1000);
+  size(500, 500);
   /*for (int i=0; i<blockN; i++) {
     playground[i] = boolean(int(random(0,2)%2));
   }*/
@@ -28,6 +28,13 @@ void keyPressed() {
     }
     switcher = false;
   }
+  
+  else if (key=='R') {
+    for (int i=0; i<blockN; i++) {
+      playground[i] = boolean(int(random(0,2)%2));
+    }
+  }
+  
 }
 
 void mousePressed() {
