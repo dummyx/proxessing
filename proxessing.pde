@@ -17,6 +17,59 @@ void setup() {
   frameRate(60);
 }
 
+void keyPressed() {
+  if (key==ENTER) {
+    switcher = true;
+  }
+  else if (key=='r') {
+    for (int i=0; i<10000; i++) {
+      playground[i] = false;
+      switcher = false;
+    }
+  }
+}
+
+void mousePressed() {
+  if (!switcher) {
+    int blockX, blockY;
+    blockX=mouseX/10;
+    blockY=mouseY/10;
+    playground[blockX+blockY*100] = !playground[blockX+blockY*100];
+  }
+}
+
+
+
+int frameCounter = 0;
+
+
+void draw() {
+  if (switcher) {
+    if (frameCounter==60) {
+      playground = proxess(playground,plength);
+      frameCounter = 0;
+    }
+    else {
+      frameCounter++;
+    }
+  }
+
+  for (int i=0; i<plength; i++) {
+    for (int j=0; j<pwidth; j++) {
+      if (playground[i*pwidth+j]==true) {
+        fill(0, 0, 0);
+        rect(j*block_size, i*block_size, block_size, block_size);
+      } 
+      else {
+        fill(255, 255, 255);
+        rect(j*block_size, i*block_size, block_size, block_size);
+      }
+    }
+  }
+}
+
+
+
 boolean[] proxess(boolean[] pre, int plength) {
   boolean[] proxessed = new boolean[10000];
   int count = 0;
@@ -77,46 +130,4 @@ boolean[] proxess(boolean[] pre, int plength) {
 
   }
   return proxessed;
-}
-
-int frameCounter = 0;
-int blockX, blockY;
-
-void draw() {
-  
-  if (key==ENTER&&keyPressed) {
-    switcher = true;
-  }
-  if (switcher) {
-    if (frameCounter==60) {
-      playground = proxess(playground,plength);
-      frameCounter = 0;
-    }
-    else {
-      frameCounter++;
-    }
-  }
-  else {
-    
-    if (mousePressed && (mouseButton == LEFT)) {
-      if (blockX!=mouseX/10||blockY!=mouseY/10) {
-        blockX=mouseX/10;
-        blockY=mouseY/10;
-        playground[blockX+blockY*100] = !playground[blockX+blockY*100];
-      }
-    }
-  }
-
-  for (int i=0; i<plength; i++) {
-    for (int j=0; j<pwidth; j++) {
-      if (playground[i*pwidth+j]==true) {
-        fill(0, 0, 0);
-        rect(j*block_size, i*block_size, block_size, block_size);
-      } 
-      else {
-        fill(255, 255, 255);
-        rect(j*block_size, i*block_size, block_size, block_size);
-      }
-    }
-  }
 }
