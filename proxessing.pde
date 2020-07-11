@@ -24,8 +24,8 @@ void keyPressed() {
   else if (key=='r') {
     for (int i=0; i<10000; i++) {
       playground[i] = false;
-      switcher = false;
     }
+    switcher = false;
   }
 }
 
