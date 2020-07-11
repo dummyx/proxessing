@@ -1,13 +1,14 @@
 final int block_size = 10;
-final int plength = 100;
 final int pwidth = 100;
+final int pheight = 100;
+final int blockN = pwidth*pheight;
 
-boolean[] playground = new boolean[10000]; 
+boolean[] playground = new boolean[blockN]; 
 boolean switcher = false;
 
 void setup() {
   size(1000, 1000);
-  /*for (int i=0; i<10000; i++) {
+  /*for (int i=0; i<blockN; i++) {
     playground[i] = boolean(int(random(0,2)%2));
   }*/
 
@@ -22,7 +23,7 @@ void keyPressed() {
     switcher = true;
   }
   else if (key=='r') {
-    for (int i=0; i<10000; i++) {
+    for (int i=0; i<blockN; i++) {
       playground[i] = false;
     }
     switcher = false;
@@ -32,9 +33,9 @@ void keyPressed() {
 void mousePressed() {
   if (!switcher) {
     int blockX, blockY;
-    blockX=mouseX/10;
-    blockY=mouseY/10;
-    playground[blockX+blockY*100] = !playground[blockX+blockY*100];
+    blockX=mouseX/block_size;
+    blockY=mouseY/block_size;
+    playground[blockX+blockY*pwidth] = !playground[blockX+blockY*pwidth];
   }
 }
 
@@ -46,7 +47,7 @@ int frameCounter = 0;
 void draw() {
   if (switcher) {
     if (frameCounter==60) {
-      playground = proxess(playground,plength);
+      playground = proxess(playground,pwidth);
       frameCounter = 0;
     }
     else {
@@ -54,7 +55,7 @@ void draw() {
     }
   }
 
-  for (int i=0; i<plength; i++) {
+  for (int i=0; i<pheight; i++) {
     for (int j=0; j<pwidth; j++) {
       if (playground[i*pwidth+j]==true) {
         fill(0, 0, 0);
@@ -70,48 +71,48 @@ void draw() {
 
 
 
-boolean[] proxess(boolean[] pre, int plength) {
-  boolean[] proxessed = new boolean[10000];
+boolean[] proxess(boolean[] pre, int pwidth) {
+  boolean[] proxessed = new boolean[blockN];
   int count = 0;
-  for (int i=0; i<10000; i++) {
+  for (int i=0; i<blockN; i++) {
     if (i==0) {
       count = int(pre[i+1]) +
-              int(pre[i+plength]) + int(pre[i+plength+1]);
+              int(pre[i+pwidth]) + int(pre[i+pwidth+1]);
     }
-    else if (i==9999) {
+    else if (i==blockN-1) {
       count = int(pre[i-1]) +
-              int(pre[i-plength]) + int(pre[i-plength-1]);
+              int(pre[i-pwidth]) + int(pre[i-pwidth-1]);
     }
-    else if (i==9900) {
+    else if (i==blockN-pwidth) {
       count = int(pre[i+1]) +
-              int(pre[i-plength]) + int(pre[i-plength+1]);
+              int(pre[i-pwidth]) + int(pre[i-pwidth+1]);
     }
-    else if (i==99) {
+    else if (i==pwidth-1) {
       count = int(pre[i-1]) +
-              int(pre[i+plength]) + int(pre[i+plength-1]);
+              int(pre[i+pwidth]) + int(pre[i+pwidth-1]);
     }
-    else if (i<99) {
+    else if (i<pwidth-1) {
       count = int(pre[i-1]) + int(pre[i+1]) +
-              int(pre[i+plength]) + int(pre[i+plength-1]) + int(pre[i+plength+1]);
+              int(pre[i+pwidth]) + int(pre[i+pwidth-1]) + int(pre[i+pwidth+1]);
     }
-    else if (i>9900) {
+    else if (i>blockN-pwidth) {
       count = int(pre[i-1]) + int(pre[i+1]) +
-              int(pre[i-plength]) + int(pre[i-plength-1]) + int(pre[i-plength+1]);
+              int(pre[i-pwidth]) + int(pre[i-pwidth-1]) + int(pre[i-pwidth+1]);
     }
-    else if (i%100==0) {
+    else if (i%pwidth==0) {
       count = int(pre[i+1]) +
-              int(pre[i+plength]) + int(pre[i+plength+1]) + 
-              int(pre[i-plength]) + int(pre[i-plength+1]);
+              int(pre[i+pwidth]) + int(pre[i+pwidth+1]) + 
+              int(pre[i-pwidth]) + int(pre[i-pwidth+1]);
     }
-    else if ((i+1)%100==0) {
+    else if ((i+1)%pwidth==0) {
       count = int(pre[i-1]) +
-              int(pre[i+plength]) + int(pre[i+plength-1]) + 
-              int(pre[i-plength]) + int(pre[i-plength-1]);
+              int(pre[i+pwidth]) + int(pre[i+pwidth-1]) + 
+              int(pre[i-pwidth]) + int(pre[i-pwidth-1]);
     }
     else {
       count = int(pre[i+1]) + int(pre[i-1]) +
-              int(pre[i+plength-1]) + int(pre[i+plength]) + int(pre[i+plength+1]) + 
-              int(pre[i-plength-1]) + int(pre[i-plength]) + int(pre[i-plength+1]);
+              int(pre[i+pwidth-1]) + int(pre[i+pwidth]) + int(pre[i+pwidth+1]) + 
+              int(pre[i-pwidth-1]) + int(pre[i-pwidth]) + int(pre[i-pwidth+1]);
     }
     if (pre[i]==true) {
       if (count<2) {
