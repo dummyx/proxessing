@@ -1,13 +1,27 @@
 final int block_size = 20;
-final int pwidth = 25;
-final int pheight = 25;
+final int pwidth = 45;
+final int pheight = 35;
 final int blockN = pwidth*pheight;
 
 boolean[] playground = new boolean[blockN]; 
 boolean switcher = false;
 
+class Template {
+  public boolean[] data;
+  public int twidth;
+  public int theight;
+}
+
+void drawTemplate(Template T) {
+  for (int i=0;i<T.theight;i++) {
+    for (int j=0;j<T.twidth;j++) {
+      playground[i*pwidth+j]=T.data[i*T.theight+j];
+    }
+  }
+}
+
 void setup() {
-  size(501, 501);
+  size(901, 701);
   /*for (int i=0; i<blockN; i++) {
     playground[i] = boolean(int(random(0,2)%2));
   }*/
@@ -42,7 +56,7 @@ void mousePressed() {
     int blockX, blockY;
     blockX=(int)(mouseX/block_size);
     blockY=(int)(mouseY/block_size);
-    playground[blockX+blockY*pwidth] = !playground[blockX+blockY*pwidth];
+    playground[blockX+blockY*pwidth] ^= true;
   }
 }
 
