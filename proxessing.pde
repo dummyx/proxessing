@@ -7,7 +7,7 @@ boolean[] playground = new boolean[blockN];
 boolean switcher = false;
 
 void setup() {
-  size(500, 500);
+  size(501, 501);
   /*for (int i=0; i<blockN; i++) {
     playground[i] = boolean(int(random(0,2)%2));
   }*/
@@ -40,8 +40,8 @@ void keyPressed() {
 void mousePressed() {
   if (!switcher) {
     int blockX, blockY;
-    blockX=mouseX/block_size;
-    blockY=mouseY/block_size;
+    blockX=(int)(mouseX/block_size);
+    blockY=(int)(mouseY/block_size);
     playground[blockX+blockY*pwidth] = !playground[blockX+blockY*pwidth];
   }
 }
