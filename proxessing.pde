@@ -1,27 +1,68 @@
 final int block_size = 20;
-final int pwidth = 45;
-final int pheight = 35;
+final int pwidth = 55;
+final int pheight = 45;
 final int blockN = pwidth*pheight;
 
 boolean[] playground = new boolean[blockN]; 
 boolean switcher = false;
 
+
+
 class Template {
   public boolean[] data;
   public int twidth;
   public int theight;
+  public Template(int[] templateData, 
+                  int   templateWidth, 
+                  int   templateHeight) {
+    boolean[] tData = new boolean[templateData.length];
+    for (int i=0;i<tData.length;i++) {
+      //tData[i] = (boolean)(templateData[i]);
+      tData[i] = templateData[i]==0 ? false : true;
+    }
+    this.data = tData;
+    this.twidth = templateWidth;
+    this.theight = templateHeight;
+  }
 }
 
+final int[] gosperData =
+{
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,
+0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int gosperWidth = 38;
+int gosperHeight = 11;
+
+Template gosper = new Template(gosperData,gosperWidth,gosperHeight);
+
 void drawTemplate(Template T) {
+  int blockX=(int)(mouseX/block_size);
+  int blockY=(int)(mouseY/block_size);
+  int drawblockX = 0;
+  int drawblockY = 0;
   for (int i=0;i<T.theight;i++) {
     for (int j=0;j<T.twidth;j++) {
-      playground[i*pwidth+j]=T.data[i*T.theight+j];
+      drawblockX = j+blockX;
+      drawblockY = i+blockY;
+      if (drawblockX>=pwidth || drawblockY>=pheight) {
+        continue;
+      }
+      playground[(i+blockY)*pwidth+drawblockX]=T.data[i*T.twidth+j];
     }
   }
 }
 
 void setup() {
-  size(901, 701);
+  size(1101, 901);
   /*for (int i=0; i<blockN; i++) {
     playground[i] = boolean(int(random(0,2)%2));
   }*/
@@ -47,6 +88,9 @@ void keyPressed() {
     for (int i=0; i<blockN; i++) {
       playground[i] = boolean(int(random(0,2)%2));
     }
+  }
+  else if (key=='p') {
+    drawTemplate(gosper);
   }
 }
 
