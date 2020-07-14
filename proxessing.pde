@@ -26,8 +26,7 @@ class Template {
   }
 }
 
-final int[] gosperData =
-{
+final int[] gosperData = {
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -39,8 +38,17 @@ final int[] gosperData =
 0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-int gosperWidth = 38;
-int gosperHeight = 11;
+final int gosperWidth = 38;
+final int gosperHeight = 11;
+
+final int[] gliderData = {
+0,0,0,0,0,
+0,0,1,0,0,
+0,0,0,1,0,
+0,1,1,1,0,
+0,0,0,0,0};
+final int gliderWidth = 5;
+final int gliderHeight = 5;
 
 Template gosper = new Template(gosperData,gosperWidth,gosperHeight);
 
@@ -106,8 +114,6 @@ void mousePressed() {
 
 
 int frameCounter = 0;
-
-
 void draw() {
   if (switcher) {
     if (frameCounter==45) {
@@ -118,7 +124,7 @@ void draw() {
       frameCounter++;
     }
   }
-
+  stroke(127,127,127);
   for (int i=0; i<pheight; i++) {
     for (int j=0; j<pwidth; j++) {
       if (playground[i*pwidth+j]==true) {
@@ -178,7 +184,7 @@ boolean[] proxess(boolean[] pre, int pwidth) {
     }
     else if ((i+1)%pwidth==0) {
       count = int(pre[i-pwidth-1]) + int(pre[i-pwidth])   + /******************/
-              int(pre[i-1])        + /*OOOOOOOOOOOOOOOO*/
+              int(pre[i-1])        + /*OOOOOOOOOOOOOOOO*/   /******************/
               int(pre[i+pwidth-1]) + int(pre[i+pwidth])     /******************/ ;
     }
     
