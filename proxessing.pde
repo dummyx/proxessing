@@ -51,6 +51,7 @@ final int gliderWidth = 5;
 final int gliderHeight = 5;
 
 Template gosper = new Template(gosperData,gosperWidth,gosperHeight);
+Template glider = new Template(gliderData,gliderWidth,gliderHeight);
 
 void drawTemplate(Template T) {
   int blockX=(int)(mouseX/block_size);
@@ -97,8 +98,11 @@ void keyPressed() {
       playground[i] = boolean(int(random(0,2)%2));
     }
   }
-  else if (key=='p') {
+  else if (key=='G') {
     drawTemplate(gosper);
+  }
+  else if (key=='g') {
+    drawTemplate(glider);
   }
 }
 
