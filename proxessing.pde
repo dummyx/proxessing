@@ -1,6 +1,6 @@
 final int block_size = 20;
-final int pwidth = 55;
-final int pheight = 45;
+final int pwidth = 65;
+final int pheight = 35;
 final int blockN = pwidth*pheight;
 
 boolean[] playground = new boolean[blockN]; 
@@ -71,7 +71,7 @@ void drawTemplate(Template T) {
 }
 
 void setup() {
-  size(1101, 901);
+  size(1301, 701);
   /*for (int i=0; i<blockN; i++) {
     playground[i] = boolean(int(random(0,2)%2));
   }*/
@@ -120,7 +120,7 @@ void mousePressed() {
 int frameCounter = 0;
 void draw() {
   if (switcher) {
-    if (frameCounter==30) {
+    if (frameCounter==15) {
       playground = proxess(playground,pwidth);
       frameCounter = 0;
     }
