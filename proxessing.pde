@@ -120,7 +120,7 @@ void mousePressed() {
 int frameCounter = 0;
 void draw() {
   if (switcher) {
-    if (frameCounter==45) {
+    if (frameCounter==30) {
       playground = proxess(playground,pwidth);
       frameCounter = 0;
     }
