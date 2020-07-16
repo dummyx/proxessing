@@ -1,143 +1,103 @@
-final int block_size = 20;
-final int pwidth = 65;
-final int pheight = 35;
-final int blockN = pwidth*pheight;
+final int blockSize = 20;
+final int playgroundWidth = 65;
+final int playgroundHeight = 35;
+final int blockAmount = playgroundWidth*playgroundHeight;
 
-boolean[] playground = new boolean[blockN]; 
-boolean switcher = false;
-
-
+boolean[] playground = new boolean[blockAmount]; 
+boolean isRunning = false;
 
 class Template {
   public boolean[] data;
-  public int twidth;
-  public int theight;
-  public Template(int[] templateData, 
-                  int   templateWidth, 
-                  int   templateHeight) {
+  public int width;
+  public Template(int[] templateData, int templateWidth) {
     boolean[] tData = new boolean[templateData.length];
     for (int i=0;i<tData.length;i++) {
       //tData[i] = (boolean)(templateData[i]);
       tData[i] = templateData[i]==0 ? false : true;
     }
     this.data = tData;
-    this.twidth = templateWidth;
-    this.theight = templateHeight;
+    this.width = templateWidth;
   }
 }
 
-final int[] gosperData = {
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,
-0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,
-0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-final int gosperWidth = 38;
-final int gosperHeight = 11;
-
-final int[] gliderData = {
-0,0,0,0,0,
-0,0,1,0,0,
-0,0,0,1,0,
-0,1,1,1,0,
-0,0,0,0,0};
-final int gliderWidth = 5;
-final int gliderHeight = 5;
-
-Template gosper = new Template(gosperData,gosperWidth,gosperHeight);
-Template glider = new Template(gliderData,gliderWidth,gliderHeight);
-
-void drawTemplate(Template T) {
-  int blockX=(int)(mouseX/block_size);
-  int blockY=(int)(mouseY/block_size);
-  int drawblockX = 0;
-  int drawblockY = 0;
-  for (int i=0;i<T.theight;i++) {
-    for (int j=0;j<T.twidth;j++) {
-      drawblockX = j+blockX;
-      drawblockY = i+blockY;
-      if (drawblockX>=pwidth || drawblockY>=pheight) {
+void applyTemplate(Template T) {
+  int mouseCoordinateX=(int)(mouseX/blockSize);
+  int mouseCoordinateY=(int)(mouseY/blockSize);
+  int blockCoordinateX = 0;
+  int blockCoordinateY = 0;
+  height = T.data.length/T.width;
+  print(T.data.length);
+  for (int i=0;i<height;i++) {
+    for (int j=0;j<T.width;j++) {
+      blockCoordinateX = j+mouseCoordinateX;
+      blockCoordinateY = i+mouseCoordinateY;
+      if (blockCoordinateX>=playgroundWidth || blockCoordinateY>=playgroundHeight) {
         continue;
       }
-      playground[(i+blockY)*pwidth+drawblockX]=T.data[i*T.twidth+j];
+      playground[(i+mouseCoordinateY)*playgroundWidth+blockCoordinateX]=T.data[i*T.width+j];
     }
   }
 }
 
 void setup() {
   size(1301, 701);
-  /*for (int i=0; i<blockN; i++) {
+  /*for (int i=0; i<blockAmount; i++) {
     playground[i] = boolean(int(random(0,2)%2));
   }*/
 
   /*playground[plength*20+20]=true;
   playground[plength*20+21]=true;
   playground[plength*20+22]=true;*/
-  frameRate(60);
+  frameRate(5);
 }
 
 void keyPressed() {
   if (key==ENTER) {
-    switcher = true;
+    isRunning ^= true;
   }
   else if (key=='r') {
-    for (int i=0; i<blockN; i++) {
+    for (int i=0; i<blockAmount; i++) {
       playground[i] = false;
     }
-    switcher = false;
+    isRunning = false;
   }
   
   else if (key=='R') {
-    for (int i=0; i<blockN; i++) {
+    for (int i=0; i<blockAmount; i++) {
       playground[i] = boolean(int(random(0,2)%2));
     }
   }
   else if (key=='G') {
-    drawTemplate(gosper);
+    applyTemplate(gosperTemplate);
   }
   else if (key=='g') {
-    drawTemplate(glider);
+    applyTemplate(gliderTemplate);
   }
 }
 
 void mousePressed() {
-  if (!switcher) {
+  if (!isRunning) {
     int blockX, blockY;
-    blockX=(int)(mouseX/block_size);
-    blockY=(int)(mouseY/block_size);
-    playground[blockX+blockY*pwidth] ^= true;
+    blockX=(int)(mouseX/blockSize);
+    blockY=(int)(mouseY/blockSize);
+    playground[blockX+blockY*playgroundWidth] ^= true;
   }
 }
 
-
-
-int frameCounter = 0;
 void draw() {
-  if (switcher) {
-    if (frameCounter==15) {
-      playground = proxess(playground,pwidth);
-      frameCounter = 0;
-    }
-    else {
-      frameCounter++;
-    }
+  if (isRunning) {
+    playground = proxess(playground,playgroundWidth);
   }
   stroke(127,127,127);
-  for (int i=0; i<pheight; i++) {
-    for (int j=0; j<pwidth; j++) {
-      if (playground[i*pwidth+j]==true) {
+  for (int i=0; i<playgroundHeight; i++) {
+    for (int j=0; j<playgroundWidth; j++) {
+      if (playground[i*playgroundWidth+j]==true) {
         fill(0, 0, 0);
-        rect(j*block_size, i*block_size, block_size, block_size);
+        rect(j*blockSize, i*blockSize, blockSize, blockSize);
       } 
       else {
         fill(255, 255, 255);
-        rect(j*block_size, i*block_size, block_size, block_size);
+        rect(j*blockSize, i*blockSize, blockSize, blockSize);
       }
     }
   }
@@ -145,58 +105,58 @@ void draw() {
 
 
 
-boolean[] proxess(boolean[] pre, int pwidth) {
-  boolean[] proxessed = new boolean[blockN];
+boolean[] proxess(boolean[] pre, int playgroundWidth) {
+  boolean[] proxessed = new boolean[blockAmount];
   int count = 0;
-  for (int i=0; i<blockN; i++) {
+  for (int i=0; i<blockAmount; i++) {
     if (i==0) {
-      count = /******************/   /******************/   /******************/
-              /******************/   /*OOOOOOOOOOOOOOOO*/   int(pre[i+1])       +
-              /******************/   int(pre[i+pwidth])   + int(pre[i+pwidth+1]);
+      count = /***************************/   /***************************/   /***************************/
+              /***************************/   /*OOOOOOOOOOOOOOOOOOOOOOOOO*/   int(pre[i+1])                +
+              /***************************/   int(pre[i+playgroundWidth])   + int(pre[i+playgroundWidth+1]);
     }
-    else if (i==blockN-1) {
-      count = /******************/   /******************/   /******************/
-              int(pre[i-1])        + /*OOOOOOOOOOOOOOOO*/   /******************/
-              int(pre[i-pwidth-1]) + int(pre[i-pwidth])     /******************/;
+    else if (i==blockAmount-1) {
+      count = /***************************/   /***************************/   /***************************/
+              int(pre[i-1])                 + /*OOOOOOOOOOOOOOOOOOOOOOOOO*/   /***************************/
+              int(pre[i-playgroundWidth-1]) + int(pre[i-playgroundWidth])     /***************************/;
     }
-    else if (i==blockN-pwidth) {
-      count = /******************/   int(pre[i-pwidth])   + int(pre[i-pwidth+1])+
-              /******************/   /*OOOOOOOOOOOOOOOO*/   int(pre[i+1])
-              /******************/   /******************/   /******************/;
+    else if (i==blockAmount-playgroundWidth) {
+      count = /***************************/   int(pre[i-playgroundWidth])   + int(pre[i-playgroundWidth+1])+
+              /***************************/   /*OOOOOOOOOOOOOOOOOOOOOOOOO*/   int(pre[i+1])
+              /***************************/   /***************************/   /***************************/;
     }
-    else if (i==pwidth-1) {
-      count = /******************/   /******************/   /******************/
-              int(pre[i-1])        + /*OOOOOOOOOOOOOOOO*/   /******************/
-              int(pre[i+pwidth-1]) + int(pre[i+pwidth])     /******************/;
+    else if (i==playgroundWidth-1) {
+      count = /***************************/   /***************************/   /***************************/
+              int(pre[i-1])                 + /*OOOOOOOOOOOOOOOOOOOOOOOOO*/   /***************************/
+              int(pre[i+playgroundWidth-1]) + int(pre[i+playgroundWidth])     /***************************/;
     }
     
     
-    else if (i<pwidth-1) {
-      count = /******************/   /******************/    /******************/
-              int(pre[i-1])        + /*OOOOOOOOOOOOOOOO*/    int(pre[i+1])       +
-              int(pre[i+pwidth-1]) + int(pre[i+pwidth])   +  int(pre[i+pwidth+1]);
+    else if (i<playgroundWidth-1) {
+      count = /***************************/   /***************************/    /***************************/
+              int(pre[i-1])                 + /*OOOOOOOOOOOOOOOOOOOOOOOOO*/    int(pre[i+1])       +
+              int(pre[i+playgroundWidth-1]) + int(pre[i+playgroundWidth])   +  int(pre[i+playgroundWidth+1]);
     }
-    else if (i>blockN-pwidth) {
-      count = int(pre[i-pwidth])   + int(pre[i-pwidth-1]) + int(pre[i-pwidth+1]) +
-              int(pre[i-1])          /*OOOOOOOOOOOOOOOO*/ + int(pre[i+1])        
-              /******************/   /******************/   /******************/ ;
+    else if (i>blockAmount-playgroundWidth) {
+      count = int(pre[i-playgroundWidth])   + int(pre[i-playgroundWidth-1]) + int(pre[i-playgroundWidth+1]) +
+              int(pre[i-1])                   /*OOOOOOOOOOOOOOOOOOOOOOOOO*/ + int(pre[i+1])        
+              /***************************/   /***************************/   /***************************/ ;
     }
-    else if (i%pwidth==0) {
-      count = /******************/   int(pre[i-pwidth])   + int(pre[i-pwidth+1]) + 
-              /******************/   /*OOOOOOOOOOOOOOOO*/   int(pre[i+1])        +
-              /******************/   int(pre[i+pwidth])   + int(pre[i+pwidth+1]) ;
+    else if (i%playgroundWidth==0) {
+      count = /***************************/   int(pre[i-playgroundWidth])   + int(pre[i-playgroundWidth+1]) + 
+              /***************************/   /*O000000000OOOOOOOOOOOOOOO*/   int(pre[i+1])                 +
+              /***************************/   int(pre[i+playgroundWidth])   + int(pre[i+playgroundWidth+1]) ;
     }
-    else if ((i+1)%pwidth==0) {
-      count = int(pre[i-pwidth-1]) + int(pre[i-pwidth])   + /******************/
-              int(pre[i-1])        + /*OOOOOOOOOOOOOOOO*/   /******************/
-              int(pre[i+pwidth-1]) + int(pre[i+pwidth])     /******************/ ;
+    else if ((i+1)%playgroundWidth==0) {
+      count = int(pre[i-playgroundWidth-1]) + int(pre[i-playgroundWidth])   + /***************************/
+              int(pre[i-1])                 + /*OOOOOOOOOOOOOOOOOOOOOOOOO*/   /***************************/
+              int(pre[i+playgroundWidth-1]) + int(pre[i+playgroundWidth])     /***************************/ ;
     }
     
     
     else {
-      count = int(pre[i+pwidth-1]) + int(pre[i+pwidth])   + int(pre[i+pwidth+1]) +
-              int(pre[i-1])        + /*OOOOOOOOOOOOOOOO*/   int(pre[i+1])        +
-              int(pre[i-pwidth-1]) + int(pre[i-pwidth])   + int(pre[i-pwidth+1]) ;
+      count = int(pre[i+playgroundWidth-1]) + int(pre[i+playgroundWidth])   + int(pre[i+playgroundWidth+1]) +
+              int(pre[i-1])                 + /*OOOOOOOOOOOOOOOOOOOOOOOOO*/   int(pre[i+1])                 +
+              int(pre[i-playgroundWidth-1]) + int(pre[i-playgroundWidth])   + int(pre[i-playgroundWidth+1]) ;
     }
     if (pre[i]==true) {
       if (count<2) {
@@ -216,3 +176,29 @@ boolean[] proxess(boolean[] pre, int pwidth) {
   }
   return proxessed;
 }
+
+//Templates
+final int[] gosperData = {
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,
+0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+final int gosperWidth = 38;
+
+final int[] gliderData = {
+0,0,0,0,0,
+0,0,1,0,0,
+0,0,0,1,0,
+0,1,1,1,0,
+0,0,0,0,0};
+final int gliderWidth = 5;
+
+final Template gosperTemplate = new Template(gosperData,gosperWidth);
+final Template gliderTemplate = new Template(gliderData,gliderWidth);
