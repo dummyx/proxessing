@@ -6,18 +6,19 @@ final int blockAmount = playgroundWidth*playgroundHeight;
 boolean[] playground = new boolean[blockAmount]; 
 boolean isRunning = false;
 
-class Template {
-  public boolean[] data;
-  public int width;
-  public Template(int[] templateData, int templateWidth) {
-    boolean[] tData = new boolean[templateData.length];
-    for (int i=0;i<tData.length;i++) {
-      //tData[i] = (boolean)(templateData[i]);
-      tData[i] = templateData[i]==0 ? false : true;
-    }
-    this.data = tData;
-    this.width = templateWidth;
-  }
+void setup() {
+  size(1301, 701);
+  stroke(127,127,127);
+  frameRate(5);
+}
+
+void previewTemplate(Template T) {
+  int mouseCoordinateX=(int)(mouseX/blockSize);
+  int mouseCoordinateY=(int)(mouseY/blockSize);
+  int blockCoordinateX = 0;
+  int blockCoordinateY = 0;
+  height = T.data.length/T.width;
+  drawBlocks(mouseCoordinateX,mouseCoordinateY,T.data,T.width);
 }
 
 void applyTemplate(Template T) {
@@ -26,7 +27,6 @@ void applyTemplate(Template T) {
   int blockCoordinateX = 0;
   int blockCoordinateY = 0;
   height = T.data.length/T.width;
-  print(T.data.length);
   for (int i=0;i<height;i++) {
     for (int j=0;j<T.width;j++) {
       blockCoordinateX = j+mouseCoordinateX;
@@ -37,18 +37,6 @@ void applyTemplate(Template T) {
       playground[(i+mouseCoordinateY)*playgroundWidth+blockCoordinateX]=T.data[i*T.width+j];
     }
   }
-}
-
-void setup() {
-  size(1301, 701);
-  /*for (int i=0; i<blockAmount; i++) {
-    playground[i] = boolean(int(random(0,2)%2));
-  }*/
-
-  /*playground[plength*20+20]=true;
-  playground[plength*20+21]=true;
-  playground[plength*20+22]=true;*/
-  frameRate(5);
 }
 
 void keyPressed() {
@@ -68,9 +56,18 @@ void keyPressed() {
     }
   }
   else if (key=='G') {
-    applyTemplate(gosperTemplate);
+    previewTemplate(gosperTemplate);
   }
   else if (key=='g') {
+    previewTemplate(gliderTemplate);
+  }
+}
+
+void keyReleased() {
+  if (key=='G') {
+    applyTemplate(gosperTemplate);
+  }
+  if (key=='g') {
     applyTemplate(gliderTemplate);
   }
 }
@@ -84,23 +81,28 @@ void mousePressed() {
   }
 }
 
+
+
+void drawBlocks(int x, int y, boolean[] data, int dataWidth) {
+  int dataHeight = data.length/dataWidth;
+  for (int i=0; i<dataHeight; i++) {
+    for (int j=0; j<dataWidth; j++) {
+      if (data[i*dataWidth+j]==true) {
+        fill(0, 0, 0);
+        rect((j+x)*blockSize, (i+y)*blockSize, blockSize, blockSize);
+      } 
+      else {
+        fill(255, 255, 255);
+        rect((j+x)*blockSize, (i+y)*blockSize, blockSize, blockSize);
+      }
+    }
+  }
+}
 void draw() {
   if (isRunning) {
     playground = proxess(playground,playgroundWidth);
   }
-  stroke(127,127,127);
-  for (int i=0; i<playgroundHeight; i++) {
-    for (int j=0; j<playgroundWidth; j++) {
-      if (playground[i*playgroundWidth+j]==true) {
-        fill(0, 0, 0);
-        rect(j*blockSize, i*blockSize, blockSize, blockSize);
-      } 
-      else {
-        fill(255, 255, 255);
-        rect(j*blockSize, i*blockSize, blockSize, blockSize);
-      }
-    }
-  }
+  drawBlocks(0,0,playground,width/blockSize);
 }
 
 
@@ -133,7 +135,7 @@ boolean[] proxess(boolean[] pre, int playgroundWidth) {
     
     else if (i<playgroundWidth-1) {
       count = /***************************/   /***************************/    /***************************/
-              int(pre[i-1])                 + /*OOOOOOOOOOOOOOOOOOOOOOOOO*/    int(pre[i+1])       +
+              int(pre[i-1])                 + /*OOOOOOOOOOOOOOOOOOOOOOOOO*/    int(pre[i+1])                +
               int(pre[i+playgroundWidth-1]) + int(pre[i+playgroundWidth])   +  int(pre[i+playgroundWidth+1]);
     }
     else if (i>blockAmount-playgroundWidth) {
@@ -178,6 +180,20 @@ boolean[] proxess(boolean[] pre, int playgroundWidth) {
 }
 
 //Templates
+class Template {
+  public boolean[] data;
+  public int width;
+  public Template(int[] templateData, int templateWidth) {
+    boolean[] tData = new boolean[templateData.length];
+    for (int i=0;i<tData.length;i++) {
+      //tData[i] = (boolean)(templateData[i]);
+      tData[i] = templateData[i]==0 ? false : true;
+    }
+    this.data = tData;
+    this.width = templateWidth;
+  }
+}
+
 final int[] gosperData = {
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
