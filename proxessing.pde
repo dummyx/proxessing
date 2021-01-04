@@ -1,16 +1,19 @@
-final int blockSize = 20;
-final int playgroundWidth = 65;
-final int playgroundHeight = 35;
-final int blockAmount = playgroundWidth*playgroundHeight;
+int blockSize = 20;
+int playgroundWidth = 65;
+int playgroundHeight = 35;
+int blockAmount = playgroundWidth*playgroundHeight;
 
-boolean[] playground = new boolean[blockAmount]; 
+
+boolean[] playground = new boolean[blockAmount];
 boolean isRunning = false;
+
 
 void setup() {
   size(1301, 701);
   stroke(127,127,127);
   frameRate(5);
 }
+
 
 void previewTemplate(Template T) {
   int mouseCoordinateX=(int)(mouseX/blockSize);
@@ -20,6 +23,7 @@ void previewTemplate(Template T) {
   height = T.data.length/T.width;
   drawBlocks(mouseCoordinateX,mouseCoordinateY,T.data,T.width);
 }
+
 
 void applyTemplate(Template T) {
   int mouseCoordinateX=(int)(mouseX/blockSize);
@@ -39,6 +43,7 @@ void applyTemplate(Template T) {
   }
 }
 
+
 void keyPressed() {
   if (key==ENTER) {
     isRunning ^= true;
@@ -49,7 +54,6 @@ void keyPressed() {
     }
     isRunning = false;
   }
-  
   else if (key=='R') {
     for (int i=0; i<blockAmount; i++) {
       playground[i] = boolean(int(random(0,2)%2));
@@ -63,6 +67,7 @@ void keyPressed() {
   }
 }
 
+
 void keyReleased() {
   if (key=='G') {
     applyTemplate(gosperTemplate);
@@ -71,6 +76,7 @@ void keyReleased() {
     applyTemplate(gliderTemplate);
   }
 }
+
 
 void mousePressed() {
   if (!isRunning) {
@@ -81,6 +87,17 @@ void mousePressed() {
   }
 }
 
+
+void mouseWheel(MouseEvent event) {
+  if (!isRunning) {
+    float e = event.getCount();
+    blockSize += e;
+    playgroundWidth = (int)width/blockSize;
+    playgroundHeight = (int)height/blockSize;
+    blockAmount = playgroundWidth*playgroundHeight;
+    playground = new boolean[blockAmount];
+  }
+}
 
 
 void drawBlocks(int x, int y, boolean[] data, int dataWidth) {
@@ -98,13 +115,15 @@ void drawBlocks(int x, int y, boolean[] data, int dataWidth) {
     }
   }
 }
+
+
 void draw() {
+  background(255);
   if (isRunning) {
     playground = proxess(playground,playgroundWidth);
   }
   drawBlocks(0,0,playground,width/blockSize);
 }
-
 
 
 boolean[] proxess(boolean[] pre, int playgroundWidth) {
@@ -131,8 +150,6 @@ boolean[] proxess(boolean[] pre, int playgroundWidth) {
               int(pre[i-1])                 + /*OOOOOOOOOOOOOOOOOOOOOOOOO*/   /***************************/
               int(pre[i+playgroundWidth-1]) + int(pre[i+playgroundWidth])     /***************************/;
     }
-    
-    
     else if (i<playgroundWidth-1) {
       count = /***************************/   /***************************/    /***************************/
               int(pre[i-1])                 + /*OOOOOOOOOOOOOOOOOOOOOOOOO*/    int(pre[i+1])                +
@@ -153,8 +170,6 @@ boolean[] proxess(boolean[] pre, int playgroundWidth) {
               int(pre[i-1])                 + /*OOOOOOOOOOOOOOOOOOOOOOOOO*/   /***************************/
               int(pre[i+playgroundWidth-1]) + int(pre[i+playgroundWidth])     /***************************/ ;
     }
-    
-    
     else {
       count = int(pre[i+playgroundWidth-1]) + int(pre[i+playgroundWidth])   + int(pre[i+playgroundWidth+1]) +
               int(pre[i-1])                 + /*OOOOOOOOOOOOOOOOOOOOOOOOO*/   int(pre[i+1])                 +
@@ -179,6 +194,7 @@ boolean[] proxess(boolean[] pre, int playgroundWidth) {
   return proxessed;
 }
 
+
 //Templates
 class Template {
   public boolean[] data;
@@ -194,6 +210,7 @@ class Template {
   }
 }
 
+
 final int[] gosperData = {
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -208,6 +225,7 @@ final int[] gosperData = {
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 final int gosperWidth = 38;
 
+
 final int[] gliderData = {
 0,0,0,0,0,
 0,0,1,0,0,
@@ -215,6 +233,7 @@ final int[] gliderData = {
 0,1,1,1,0,
 0,0,0,0,0};
 final int gliderWidth = 5;
+
 
 final Template gosperTemplate = new Template(gosperData,gosperWidth);
 final Template gliderTemplate = new Template(gliderData,gliderWidth);
